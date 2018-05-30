@@ -5,7 +5,10 @@ const combineReducers = require('redux').combineReducers;
 const aReducer = (state = [], actions) => {
     switch (actions.type) {
         case 'ADD_OBJECT':
-            return state.concat([actions.title + ' in a']);
+            return [...state, actions.title + ' in a'];
+
+        case 'RANDOMIZE_ITEM':
+            return [...state, Math.random()];
     }
     return state;
 };
@@ -13,14 +16,14 @@ const aReducer = (state = [], actions) => {
 const bReducer = (state = [], actions) => {
     switch (actions.type) {
         case 'ADD_OBJECT':
-            return state.concat([actions.title + ' in b']);
+            return [...state, actions.title + ' in b'];
     }
     return state;
 };
 
 // actions creator
 const addObject = (title) => ({ type: 'ADD_OBJECT', title });
-
+const randomizeItem = (index) => ({ type: 'RANDOMIZE_ITEM', index });
 
 // middleware
 const logger = (store) => {
@@ -41,3 +44,4 @@ const store = createStore(
 store.dispatch = logger(store);
 
 store.dispatch(addObject('a title'));
+store.dispatch(randomizeItem());
