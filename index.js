@@ -21,7 +21,10 @@ const bReducer = (state = [], actions) => {
 // actions creator
 const addObject = (title) => ({ type: 'ADD_OBJECT', title });
 
-const store = createStore(combineReducers({ a: aReducer, b: bReducer }));
+const store = createStore(
+    combineReducers({ a: aReducer, b: bReducer }),
+    { a: ['initial value in a'], b: ['initial value in b'] }
+);
 
 store.dispatch(addObject('a title'));
 console.log(store.getState());
