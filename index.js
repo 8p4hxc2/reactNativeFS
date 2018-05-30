@@ -21,10 +21,23 @@ const bReducer = (state = [], actions) => {
 // actions creator
 const addObject = (title) => ({ type: 'ADD_OBJECT', title });
 
+
+// middleware
+const logger = (store) => {
+    const rawDispatcher = store.dispatch;
+    return (action) => {
+        console.log('state before action ' + action.type, store.getState());
+        const returnValue = rawDispatcher(action);
+        console.log('state after action ' + action.type, store.getState());
+        return returnValue;
+    };
+};
+
 const store = createStore(
     combineReducers({ a: aReducer, b: bReducer }),
     { a: ['initial value in a'], b: ['initial value in b'] }
 );
 
+store.dispatch = logger(store);
+
 store.dispatch(addObject('a title'));
-console.log(store.getState());
