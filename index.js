@@ -36,12 +36,15 @@ const logger = (store) => {
     };
 };
 
+// store creation
 const store = createStore(
     combineReducers({ a: aReducer, b: bReducer }),
     { a: ['initial value in a'], b: ['initial value in b'] }
 );
 
+// apply middlewares
 store.dispatch = logger(store);
 
+// dispatch actions
 store.dispatch(addObject('a title'));
 store.dispatch(randomizeItem());
