@@ -6,13 +6,18 @@
         "type": "git",
         "url": "https://github.com/8p4hxc2/reactNativeFS"
     },
+    "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
     "scripts": {
-        "start": "webpack-dev-server --watch ",
+        "start": "react-native-scripts start",
         "test": "jest"
     },
-    "dependencies": {},
+    "dependencies": {
+        "expo": "^27.0.2",
+        "react": "^16.4.0",
+        "react-native": "^0.55.4",
+        "redux": "^4.0.0"
+    },
     "devDependencies": {
-        "webpack": "latest",
-        "webpack-dev-server": "latest"
+        "react-native-scripts": "1.14.0"
     }
 }
