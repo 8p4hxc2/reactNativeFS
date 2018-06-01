@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, combineReducers, connect } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { connect, Provider } from 'react-redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 import React, { Component } from 'react';
@@ -43,15 +44,14 @@ const logger = (store) => {
 
 // redux saga middleware
 function* fetchRandom(action) {
-    //try {
-    console.log("fetchRandom");
-    yield delay(1000);
-    const randomNumber = Math.random();
-    yield put({ type: "RANDOMIZE_ITEM_SUCCESS", number: randomNumber });
-    //}
-    //catch (e) {
-    //    yield put({ type: "RANDOMIZE_ITEM_FAIL" });
-    //}
+    try {
+        yield delay(1000);
+        const randomNumber = Math.random();
+        yield put({ type: "RANDOMIZE_ITEM_SUCCESS", number: randomNumber });
+    }
+    catch (e) {
+        yield put({ type: "RANDOMIZE_ITEM_FAIL" });
+    }
 }
 
 function* aSaga() {
@@ -63,7 +63,7 @@ const sagaMw = createSagaMiddleware();
 // store creation
 const store = createStore(
     combineReducers({ a: aReducer, b: bReducer }),
-    { a: { number: 0 }, b: ['init value in b'] },
+    { a: {}, b: {} },
     applyMiddleware(sagaMw)
 );
 
@@ -73,25 +73,32 @@ store.dispatch = logger(store);
 // run saga
 sagaMw.run(aSaga);
 
-export default class App extends Component {
-    componentDidMount() {
-        this.unsubscribe = store.subscribe(() => {
-            this.forceUpdate();
-        });
-    }
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
+// entry point component
+class App extends Component {
     render() {
-        console.log("render" + store.getState().a.number);
-        const state = store.getState();
+        const { a, dispatch } = this.props;
+        console.log("A RENDER" + a.number);
 
         return (
             <View>
-                <Button onPress={()=>{store.dispatch(randomizeItem());}} title={''+state.a.number}></Button>
+                <Button
+                    onPress={() => { dispatch(randomizeItem()); }}
+                    title={'' + a.number}>
+                </Button>
             </View>
         );
     };
 };
+
+// use the connect helper from redux that will enable the update of App when the redux store is updated
+// fix some issue with double render when doing the subscribe on the store ourself
+const ReduxApp = connect((state) => {
+    return state;
+})(App);
+
+export default () => (
+    <Provider store={store}>
+        <ReduxApp />
+    </Provider>
+);
