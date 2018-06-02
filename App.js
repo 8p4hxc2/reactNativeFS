@@ -108,16 +108,30 @@ class App extends Component {
     constructor() {
         super();
         this.spinValue = new Animated.Value(0);
+        this.slideValue = new Animated.Value(0);
     }
 
     componentDidMount() {
-        this.spin();
+        //this.spin();
+        this.slide();
     }
 
     spin() {
         this.spinValue.setValue(0);
         Animated.timing(
             this.spinValue,
+            {
+                toValue: 1,
+                duration: 4000,
+                easing: Easing.linear
+            }
+        ).start((o) => { if (o.finished) { this.slide(); } })
+    }
+
+    slide() {
+        this.slideValue.setValue(0);
+        Animated.timing(
+            this.slideValue,
             {
                 toValue: 1,
                 duration: 4000,
@@ -133,6 +147,11 @@ class App extends Component {
             outputRange: ['0deg', '360deg']
         });
 
+        const slide = this.slideValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 360]
+        });
+
         return (
             <View>
                 <Animated.View
@@ -140,11 +159,10 @@ class App extends Component {
                         width: 227,
                         height: 200,
                         backgroundColor: 'green',
-                        transform: [{ rotate: spin }]
+                        transform: [{ translateX: slide }]
                     }}
                     source={{ uri: 'https://s3.amazonaws.com/media-p.slid.es/uploads/alexanderfarennikov/images/1198519/reactjs.png' }}
                 />
-
                 <TouchableOpacity onPress={() => {
                     this.stopped = !this.stopped;
 
