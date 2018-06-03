@@ -3,7 +3,7 @@ import { connect, Provider } from 'react-redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 import React, { Component } from 'react';
-import { View, StatusBar, Button, TouchableOpacity, Text, Animated, Image, Easing, Icon } from 'react-native';
+import { View, StatusBar, Button, TouchableOpacity, Text, Animated, Image, Easing, Icon, ScrollView, FlatList } from 'react-native';
 
 StatusBar.setHidden(true);
 
@@ -137,7 +137,7 @@ class App extends Component {
                 duration: 400,
                 easing: Easing.linear
             }
-        ).start((o) => { if (o.finished) {this.stopped=true; } })
+        ).start((o) => { if (o.finished) { this.stopped = true; } })
     }
 
     render() {
@@ -163,17 +163,25 @@ class App extends Component {
                     }}
                     source={{ uri: 'https://s3.amazonaws.com/media-p.slid.es/uploads/alexanderfarennikov/images/1198519/reactjs.png' }}
                 >
-                <Button
-                    style={styles}
-                    rounded
-                    onPress={() => { dispatch(randomizeItem()); }}
-                    title={'' + a.number}>
-                </Button>
+                    <FlatList horizontal={false}
+                        ListHeaderComponent={<Text>lola?</Text>}
+                        data={[{ key: 'Title2 1' }, { key: 'Title 2' }, { key: 'Title 3' }, { key: 'Title 4' }, { key: 'Title 5' }]}
+                        renderItem={({ item }) => <Text style={{ width: 50, height: 50 }}>{item.key}</Text>}
+                        refreshing={false}
+                        refresh={() => { console.log('whut') }}
+                    />
 
-                <Button
-                    onPress={() => { dispatch(fetchJsonFromWeb()); }}
-                    title={'' + a.json}>
-                </Button>
+                    <Button
+                        style={styles}
+                        rounded
+                        onPress={() => { dispatch(randomizeItem()); }}
+                        title={'' + a.number}>
+                    </Button>
+
+                    <Button
+                        onPress={() => { dispatch(fetchJsonFromWeb()); }}
+                        title={'' + a.json}>
+                    </Button>
                 </Animated.View>
                 <TouchableOpacity onPress={() => {
                     this.stopped = !this.stopped;
