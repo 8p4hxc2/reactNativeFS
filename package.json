@@ -9,6 +9,7 @@
     "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
     "scripts": {
         "start": "react-native-scripts start",
+        "android": "react-native-scripts android",
         "test": "jest"
     },
     "dependencies": {
