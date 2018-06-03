@@ -113,7 +113,7 @@ class App extends Component {
 
     componentDidMount() {
         //this.spin();
-        this.slide();
+        //this.slide();
     }
 
     spin() {
@@ -129,15 +129,15 @@ class App extends Component {
     }
 
     slide() {
-        this.slideValue.setValue(0);
+        //this.slideValue.setValue(0);
         Animated.timing(
             this.slideValue,
             {
-                toValue: 1,
-                duration: 4000,
+                toValue: Math.round(Math.random()),
+                duration: 400,
                 easing: Easing.linear
             }
-        ).start((o) => { if (o.finished) { this.spin(); } })
+        ).start((o) => { if (o.finished) {this.stopped=true; } })
     }
 
     render() {
@@ -159,24 +159,10 @@ class App extends Component {
                         width: 227,
                         height: 200,
                         backgroundColor: 'green',
-                        transform: [{ translateX: slide }]
+                        transform: [{ translateY: slide }]
                     }}
                     source={{ uri: 'https://s3.amazonaws.com/media-p.slid.es/uploads/alexanderfarennikov/images/1198519/reactjs.png' }}
-                />
-                <TouchableOpacity onPress={() => {
-                    this.stopped = !this.stopped;
-
-                    if (this.stopped) {
-                        Animated.timing(
-                            this.spinValue
-                        ).stop();
-                    }
-                    else {
-                        this.spin();
-                    }
-                }} style={{ backgroundColor: 'red', height: 100, marginTop: 10 }}>
-                    <Text>MyA button</Text>
-                </TouchableOpacity>
+                >
                 <Button
                     style={styles}
                     rounded
@@ -188,6 +174,21 @@ class App extends Component {
                     onPress={() => { dispatch(fetchJsonFromWeb()); }}
                     title={'' + a.json}>
                 </Button>
+                </Animated.View>
+                <TouchableOpacity onPress={() => {
+                    this.stopped = !this.stopped;
+
+                    if (this.stopped) {
+                        Animated.timing(
+                            this.slideValue
+                        ).stop();
+                    }
+                    else {
+                        this.slide();
+                    }
+                }} style={{ backgroundColor: 'red', height: 100, marginTop: 10 }}>
+                    <Text>MyA button</Text>
+                </TouchableOpacity>
             </View>
         );
     };
