@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { Splashscreen, Home } from './screens';
+import { Splashscreen, Home, About } from './screens';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { View, StatusBar, Button, TouchableOpacity, Text, Animated, Image, Easing, Icon, ScrollView, FlatList, Platform } from 'react-native';
@@ -29,21 +29,39 @@ const store = createStore(
     }
 }*/
 
-
-const AppNavigator = createStackNavigator(
+const MainStack = createStackNavigator(
     {
         Splashscreen: { screen: Splashscreen },
-        Home: { screen: Home,headerMode: 'none' }
+        Home: { screen: Home },
+        
     },
     {
         // Default config for all screens
         headerMode: 'none',
         title: 'Main',
-        initialRouteName: 'Splashscreen'
+        initialRouteName: 'Home'
     }
 );
 
-const ReduxApp = connect((state) => (state))(AppNavigator);
+const RootStack = createStackNavigator(
+    {
+      Main: {
+        screen: MainStack,
+      },
+      About: { screen: About }
+    },
+    {
+      mode: 'modal',
+      headerMode: 'none',
+      navigationOptions: {
+        gesturesEnabled: true,
+      },
+    }
+  );
+
+
+
+const ReduxApp = connect((state) => (state))(RootStack);
 
 
 
