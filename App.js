@@ -3,7 +3,7 @@ import { connect, Provider } from 'react-redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 import React, { Component } from 'react';
-import { View, StatusBar, Button, TouchableOpacity, Text, Animated, Image, Easing, Icon, ScrollView, FlatList } from 'react-native';
+import { View, StatusBar, Button, TouchableOpacity, Text, Animated, Image, Easing, Icon, ScrollView, FlatList, Platform } from 'react-native';
 
 StatusBar.setHidden(true);
 
@@ -47,6 +47,8 @@ const logger = (store) => {
         return returnValue;
     };
 };
+
+console.log(Platform.select({ android: 'android', ios: 'ios' }));
 
 // redux saga middleware
 function* fetchRandom(action) {
